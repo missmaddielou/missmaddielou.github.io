@@ -1,0 +1,14 @@
+# RRSSB
+facebook: true
+twitter: true
+googleplus: false
+linkedin: false
+reddit: false
+hackernews: false
+pinterest: true
+tumblr: false
+pocket: false
+email: true
+
+# Disqus
+disqus_shortname: 'example'
