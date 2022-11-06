@@ -5,49 +5,96 @@
 <script type="text/javascript" src="{{ "/assets/js/libs/rrssb.min.js" | prepend: site.baseurl }}"></script>
 <script type="text/javascript" src="{{ "/assets/js/functions.js" | prepend: site.baseurl }}"></script>
 <script type="text/javascript">
-    $(function($) {
-        $.slidebars();
+	$(function($) {
+		$.slidebars();
 
-        var steps = [];
-        var images = [
-            {% for image in page.backgrounds %}'{{ image }}',{% endfor %}
-        ];
+		var steps = [];
+		var images = [
+			{% for image in page.backgrounds %}'{{ image }}',{% endfor %}
+		];
 
-        if (images.length > 0) {
-            $('.loader').addClass('loading');
+		if (images.length > 0) {
+			$('.loader').addClass('loading');
 
-            steps = scrollSteps(images.length);
+			steps = scrollSteps(images.length);
 
-            $.backstretch(images, {
-                fade: 1000
-            });
+			$.backstretch(images, {
+				fade: 1000
+			});
 
-            $.backstretch('pause');
-        }
+			$.backstretch('pause');
+		}
 
-        $(document).on("backstretch.before", function (e, instance, index) {
-            $('.loader').addClass('loading');
-        });
+		$(document).on("backstretch.before", function (e, instance, index) {
+			$('.loader').addClass('loading');
+		});
 
-        $(document).on('scrollstop', function () {
-            if (steps.length > 0) {
-                var percentage = scrollPercentage();
+		$(document).on('scrollstop', function () {
+			if (steps.length > 0) {
+				var percentage = scrollPercentage();
 
-                for (var i = 0; i < steps.length; i++) {
-                    if (percentage < steps[i]) {
-                        if (i == $("body").data("backstretch").index) {
-                            break;
-                        }
+				for (var i = 0; i < steps.length; i++) {
+					if (percentage < steps[i]) {
+						if (i == $("body").data("backstretch").index) {
+							break;
+						}
 
-                        $.backstretch('show', i);
-                        break;
-                    }
-                }
-            }
-        });
+						$.backstretch('show', i);
+						break;
+					}
+				}
+			}
+		});
 
-        $(document).on("backstretch.after", function (e, instance, index) {
-            $('.loader').removeClass('loading');
-        });
-    });
+		$(document).on("backstretch.after", function (e, instance, index) {
+			$('.loader').removeClass('loading');
+		});
+	});
+</script>
+<script>
+	let darkBoxVisible = false;
+
+	window.addEventListener('load', (event) => {
+		let images = document.getElementById("gallery").querySelectorAll("img");
+		if(images !== null && images !== undefined && images.length > 0) {
+			images.forEach(function(img) {
+				img.addEventListener('click', (evt) => {
+					showDarkbox(img.src);
+				});
+			});
+		}
+	});
+
+	function showDarkbox(url) {
+		if(!darkBoxVisible) {
+			let x = (window.innerWidth - 1280) / 2;
+			let y = window.scrollY + 50;
+
+			// Create the darkBox
+			var div = document.createElement("div");
+			div.id = "darkbox";
+			div.innerHTML = '<img class="darkboximg" src="'+url+'" />';
+			document.body.appendChild(div);
+			let box = document.getElementById("darkbox");
+			box.style.left = x.toString()+"px";
+			box.style.top = y.toString()+"px";
+			box.style.height = 'auto';
+			box.addEventListener('click', (event) => {
+				// Remove it
+				let element = document.getElementById("darkbox");
+				element.parentNode.removeChild(element);
+
+				darkBoxVisible = false;
+			})
+
+			darkBoxVisible = true;
+
+		} else {
+			// Remove it
+			let element = document.getElementById("darkbox");
+			element.parentNode.removeChild(element);
+
+			darkBoxVisible = false;
+		}
+	}
 </script>
